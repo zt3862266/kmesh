@@ -1,0 +1,36 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+
+  build-and-push:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Log in to Registry
+        run: |
+          echo "${{ secrets.GH_PAT }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+      
+      - name: Build Docker Image
+        run: |
+          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} .
+          docker images 
+  
+      - name: Push to GitHub Container Registry
+        run: docker push $IMAGE_NAME --all-tags
