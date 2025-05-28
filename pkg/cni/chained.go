@@ -39,6 +39,7 @@ const (
 
 func (i *Installer) getCniConfigPath() (string, error) {
 	var confFile string
+	log.Infof("CniConfigName:%s", i.CniConfigName)
 	if len(i.CniConfigName) != 0 {
 		confFile = filepath.Join(i.CniMountNetEtcDIR, i.CniConfigName)
 		confList, err := libcni.ConfListFromFile(confFile)
@@ -54,6 +55,8 @@ func (i *Installer) getCniConfigPath() (string, error) {
 		}
 	} else {
 		files, err := libcni.ConfFiles(i.CniMountNetEtcDIR, []string{".conflist"})
+		log.Infof("CniMountDIr:%s", i.CniMountNetEtcDIR)
+		log.Infof("ConfFIle:%#v", files)
 		if err != nil {
 			err = fmt.Errorf("failed to load conflist from dir :%v, : %v", i.CniMountNetEtcDIR, err)
 			log.Error(err)

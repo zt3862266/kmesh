@@ -10,7 +10,7 @@ on:
     tags:
       - "v*.*.*"
 env:
-  REGISTRY_IMAGE: ghcr.io/kmesh-net/kmesh-build
+  REGISTRY_IMAGE: ghcr.io/zt3862266/kmesh-build
 jobs:
   build:
     runs-on: ubuntu-22.04
